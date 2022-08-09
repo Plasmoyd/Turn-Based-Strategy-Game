@@ -12,6 +12,11 @@ public class Unit : MonoBehaviour
 
     private Vector3 targetPosition;
 
+    private void Start()
+    {
+        targetPosition = transform.position;
+    }
+
     void Update()
     {
 
@@ -28,14 +33,9 @@ public class Unit : MonoBehaviour
             unitAnimator.SetBool("isRunning", false);
         }
         
-
-        if(Input.GetMouseButtonDown(1))
-        {
-            SetTargetPosition(MouseWorld.GetMousePosition());
-        }
     }
 
-    private void SetTargetPosition(Vector3 targetPosition)
+    public void SetTargetPosition(Vector3 targetPosition)
     {
         this.targetPosition = targetPosition;
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class MouseWorld : MonoBehaviour
 {
 
     [SerializeField] LayerMask mousePlaneLayerMask;
+    [SerializeField] LayerMask unitLayerMask;
 
     private static MouseWorld instance;
 
@@ -28,4 +30,5 @@ public class MouseWorld : MonoBehaviour
 
         return hit.point;
     }
+
 }
