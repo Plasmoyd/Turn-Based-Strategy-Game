@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
-  rotationSpeed: 15
+  rotationSpeed: 20
   stoppingDistance: 0.1
   unitAnimator: {fileID: 4323533637973802927}
 --- !u!65 &736390298239884658

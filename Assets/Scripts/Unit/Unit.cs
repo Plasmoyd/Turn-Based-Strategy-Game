@@ -11,10 +11,17 @@ public class Unit : MonoBehaviour
     [SerializeField] Animator unitAnimator;
 
     private Vector3 targetPosition;
+    private GridPosition currentGridPosition;
+
+    private void Awake()
+    {
+        targetPosition = transform.position;
+    }
 
     private void Start()
     {
-        targetPosition = transform.position;
+        currentGridPosition = GridLevel.Instance.GetGridPosition(transform.position);
+        GridLevel.Instance.SetUnitAtGridPosition(currentGridPosition, this);
     }
 
     void Update()
@@ -31,6 +38,15 @@ public class Unit : MonoBehaviour
         else
         {
             unitAnimator.SetBool("isRunning", false);
+        }
+
+        GridPosition newGridPosition = GridLevel.Instance.GetGridPosition(transform.position);
+
+        if(currentGridPosition != newGridPosition)
+        {
+            GridLevel.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
+            GridLevel.Instance.SetUnitAtGridPosition(newGridPosition, this);
+            currentGridPosition = newGridPosition;
         }
         
     }
