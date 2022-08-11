@@ -34,4 +34,5 @@ public class GridObject
 
     public void RemoveUnit(Unit unit) => this.unitList.Remove(unit);
 
+    public bool IsPopulated() => this.unitList.Count > 0;
 }

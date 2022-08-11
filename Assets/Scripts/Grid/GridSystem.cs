@@ -1,9 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GridSystem
 {
+
+    private const int STARTING_WIDTH = 0;
+    private const int STARTING_HEIGHT = 0;
+
     private int width;
     private int height;
     private float cellSize;
@@ -18,9 +23,9 @@ public class GridSystem
 
         this.gridObjects = new GridObject[width, height];
 
-        for(int x = 0; x < width; x++)
+        for(int x = STARTING_WIDTH; x < width; x++)
         {
-            for(int z = 0; z < height; z++)
+            for(int z = STARTING_HEIGHT; z < height; z++)
             {
                 GridPosition gridPosition = new GridPosition(x, z);
                 gridObjects[x, z] = new GridObject(this, gridPosition);
@@ -57,8 +62,10 @@ public class GridSystem
         }
     }
 
-    public GridObject GetGridObject(GridPosition gridPosition)
-    {
-        return gridObjects[gridPosition.x, gridPosition.z];
-    }
+    public GridObject GetGridObject(GridPosition gridPosition) => gridObjects[gridPosition.x, gridPosition.z];
+
+    public bool IsValidGridPosition(GridPosition gridPosition) => (gridPosition.x >= STARTING_WIDTH && gridPosition.x < width) && (gridPosition.z >= STARTING_HEIGHT && gridPosition.z < height);
+
+    public bool IsOccupiedGridPosition(GridPosition gridPosition) => GetGridObject(gridPosition).IsPopulated(); //checks if there are any units stored in grid object on this grid position
+
 }

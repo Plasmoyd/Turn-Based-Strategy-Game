@@ -33,4 +33,11 @@ public class GridLevel : MonoBehaviour
     public void ClearUnitAtGridPosition(GridPosition gridPosition, Unit unit) => gridSystem.GetGridObject(gridPosition).RemoveUnit(unit);
 
     public GridPosition GetGridPosition(Vector3 worldPosition) => gridSystem.GetGridPosition(worldPosition);
+
+    public Vector3 GetWorldPosition(GridPosition gridPosition) => gridSystem.GetWorldPosition(gridPosition);
+
+    public bool IsValidGridPosition(GridPosition gridPosition) => gridSystem.IsValidGridPosition(gridPosition);
+
+    public bool IsOccupiedGridPosition(GridPosition gridPosition) => gridSystem.IsOccupiedGridPosition(gridPosition);
+
 }

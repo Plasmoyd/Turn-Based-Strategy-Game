@@ -36,7 +36,7 @@ public class UnitActionSystem : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            selectedUnit.SetTargetPosition(MouseWorld.GetMousePosition());
+            SetSelectedUnitsTargetPosition();
         }
     }
 
@@ -57,6 +57,17 @@ public class UnitActionSystem : MonoBehaviour
     {
         selectedUnit = unit;
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void SetSelectedUnitsTargetPosition()
+    {
+        GridPosition mouseGridPosition = GridLevel.Instance.GetGridPosition(MouseWorld.GetMousePosition()); // turning mice world position to corresponding grid position
+
+        if(GetSelectedUnit().GetMoveAction().IsValidGridPosition(mouseGridPosition)) // checking whether that gridPosition is valid
+        {
+            selectedUnit.GetMoveAction().SetTargetPosition(mouseGridPosition); //if it is, then we setSelected units target position
+        }
+
     }
 
     public Unit GetSelectedUnit()
