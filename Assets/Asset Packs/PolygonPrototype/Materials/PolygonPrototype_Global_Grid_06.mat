@@ -54,7 +54,7 @@ Material:
     m_Floats:
     - OverlayAmount: 0.5
     - _Falloff: 50
-    - _GridScale: 0.5
+    - _GridScale: 1
     - _OverlayAmount: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0

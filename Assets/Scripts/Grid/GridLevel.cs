@@ -40,4 +40,12 @@ public class GridLevel : MonoBehaviour
 
     public bool IsOccupiedGridPosition(GridPosition gridPosition) => gridSystem.IsOccupiedGridPosition(gridPosition);
 
+    public int GetGridWidth() => gridSystem.GetGridWidth();
+
+    public int GetGridHeight() => gridSystem.GetGridHeight();
+
+    public int GetStartingGridWidth() => gridSystem.GetStartingWidth();
+
+    public int GetStartingGridHeight() => gridSystem.GetStartingHeight();
+
 }

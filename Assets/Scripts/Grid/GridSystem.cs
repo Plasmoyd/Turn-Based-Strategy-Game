@@ -68,4 +68,12 @@ public class GridSystem
 
     public bool IsOccupiedGridPosition(GridPosition gridPosition) => GetGridObject(gridPosition).IsPopulated(); //checks if there are any units stored in grid object on this grid position
 
+    public int GetGridWidth() => this.width;
+
+    public int GetGridHeight() => this.height;
+
+    public int GetStartingWidth() => STARTING_WIDTH;
+
+    public int GetStartingHeight() => STARTING_HEIGHT;
+
 }
