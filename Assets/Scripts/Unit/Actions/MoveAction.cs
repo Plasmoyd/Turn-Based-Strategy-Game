@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-[RequireComponent(typeof(Unit))]
-public class MoveAction : MonoBehaviour
+public class MoveAction : BaseAction
 {
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float rotationSpeed = 4f;
@@ -13,16 +13,17 @@ public class MoveAction : MonoBehaviour
     [SerializeField] int maxMoveDistance = 4;
 
     private Vector3 targetPosition;
-    private Unit unit;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         targetPosition = transform.position;
-        unit = GetComponent<Unit>();
     }
 
     void Update()
     {
+        if (!isActive) return;
+
         if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
         {
             Vector3 moveDirection = (targetPosition - transform.position).normalized; //without normalizing, we would have a direction vector with a magnitude applied
@@ -34,6 +35,8 @@ public class MoveAction : MonoBehaviour
         else
         {
             unitAnimator.SetBool("isRunning", false);
+            isActive = false;
+            onActionComplete();
         }
     }
 
@@ -65,6 +68,11 @@ public class MoveAction : MonoBehaviour
 
     public bool IsValidGridPosition(GridPosition gridPosition) => GetValidGridPositionList().Contains(gridPosition);
 
-    public void SetTargetPosition(GridPosition targetPosition) => this.targetPosition = GridLevel.Instance.GetWorldPosition(targetPosition);
+    public void SetTargetPosition(GridPosition targetPosition, Action onMoveComplete)
+    {
+        this.onActionComplete = onMoveComplete;
+        this.targetPosition = GridLevel.Instance.GetWorldPosition(targetPosition);
+        isActive = true;
+    }
     
 }

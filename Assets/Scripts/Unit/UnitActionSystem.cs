@@ -10,6 +10,8 @@ public class UnitActionSystem : MonoBehaviour
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitLayerMask;
 
+    private bool isBusy;
+
     public event EventHandler OnSelectedUnitChanged;
 
     public static UnitActionSystem Instance { get; private set; } //Singleton
@@ -29,6 +31,8 @@ public class UnitActionSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isBusy) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             HandleUnitSelection();
@@ -37,6 +41,13 @@ public class UnitActionSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             SetSelectedUnitsTargetPosition();
+            SetBusy();
+        }
+
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            HandleSpinning();
+            SetBusy();
         }
     }
 
@@ -65,10 +76,16 @@ public class UnitActionSystem : MonoBehaviour
 
         if(GetSelectedUnit().GetMoveAction().IsValidGridPosition(mouseGridPosition)) // checking whether that gridPosition is valid
         {
-            selectedUnit.GetMoveAction().SetTargetPosition(mouseGridPosition); //if it is, then we setSelected units target position
+            selectedUnit.GetMoveAction().SetTargetPosition(mouseGridPosition, ClearBusy); //if it is, then we setSelected units target position
         }
 
     }
+
+    private void HandleSpinning() => GetSelectedUnit().GetSpinAction().StartSpinning(ClearBusy);
+
+    private void SetBusy() => isBusy = true;
+
+    private void ClearBusy() => isBusy = false;
 
     public Unit GetSelectedUnit()
     {
