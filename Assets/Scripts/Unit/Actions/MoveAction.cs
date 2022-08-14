@@ -74,5 +74,6 @@ public class MoveAction : BaseAction
         this.targetPosition = GridLevel.Instance.GetWorldPosition(targetPosition);
         isActive = true;
     }
-    
+
+    public override string GetActionName() => "Move";
 }
