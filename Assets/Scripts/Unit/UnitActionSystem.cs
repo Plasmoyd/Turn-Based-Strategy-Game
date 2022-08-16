@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UnitActionSystem : MonoBehaviour
 {
@@ -10,9 +11,12 @@ public class UnitActionSystem : MonoBehaviour
     [SerializeField] private Unit selectedUnit;
     [SerializeField] private LayerMask unitLayerMask;
 
+    private BaseAction selectedAction;
     private bool isBusy;
 
     public event EventHandler OnSelectedUnitChanged;
+    public event EventHandler OnSelectedActionChanged;
+    public event EventHandler<bool> OnBusyChanged;
 
     public static UnitActionSystem Instance { get; private set; } //Singleton
 
@@ -28,67 +32,102 @@ public class UnitActionSystem : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        SetSelectedUnit(selectedUnit);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        if (isBusy) return;
-
-        if (Input.GetMouseButtonDown(0))
+        if (isBusy)
         {
-            HandleUnitSelection();
+            return;
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if(EventSystem.current.IsPointerOverGameObject())
         {
-            SetSelectedUnitsTargetPosition();
-            SetBusy();
+            return;
         }
 
-        if(Input.GetKeyDown(KeyCode.T))
+        if (TryHandleUnitSelection())
         {
-            HandleSpinning();
-            SetBusy();
+            return;
         }
+
+        HandleSelectedAction();
     }
 
-    private void HandleUnitSelection()
+    private bool TryHandleUnitSelection()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, unitLayerMask))
+        if(Input.GetMouseButtonDown(0))
         {
-            if (hit.transform.TryGetComponent<Unit>(out Unit unit))
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, unitLayerMask))
             {
-                SetSelectedUnit(unit);
+                if (hit.transform.TryGetComponent<Unit>(out Unit unit))
+                {
+                    if(unit == selectedUnit)
+                    {
+                        return false;
+                    }
+
+                    SetSelectedUnit(unit);
+                    return true;
+                }
             }
         }
+
+        return false;
     }
 
     private void SetSelectedUnit(Unit unit)
     {
         selectedUnit = unit;
+        SetSelectedAction(selectedUnit.GetMoveAction());
         OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private void SetSelectedUnitsTargetPosition()
+    private void HandleSelectedAction()
     {
-        GridPosition mouseGridPosition = GridLevel.Instance.GetGridPosition(MouseWorld.GetMousePosition()); // turning mice world position to corresponding grid position
-
-        if(GetSelectedUnit().GetMoveAction().IsValidGridPosition(mouseGridPosition)) // checking whether that gridPosition is valid
+        if(Input.GetMouseButtonDown(0))
         {
-            selectedUnit.GetMoveAction().SetTargetPosition(mouseGridPosition, ClearBusy); //if it is, then we setSelected units target position
-        }
+            GridPosition mouseGridPosition = GridLevel.Instance.GetGridPosition(MouseWorld.GetMousePosition()); // turning mice world position to corresponding grid position
 
+            if(selectedAction.IsValidGridPosition(mouseGridPosition))
+            {
+                SetBusy();
+                selectedAction.TakeAction(mouseGridPosition, ClearBusy);
+            }
+        }
     }
 
-    private void HandleSpinning() => GetSelectedUnit().GetSpinAction().StartSpinning(ClearBusy);
+    public void SetSelectedAction(BaseAction baseAction)
+    {
+        this.selectedAction = baseAction;
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty);
+    }
 
-    private void SetBusy() => isBusy = true;
+    public BaseAction GetSelectedAction() => this.selectedAction;
 
-    private void ClearBusy() => isBusy = false;
+    private void SetBusy()
+    {
+        isBusy = true;
+        OnBusyChanged?.Invoke(this, isBusy);
+    }
+
+    private void ClearBusy()
+    {
+        isBusy = false;
+        OnBusyChanged?.Invoke(this, isBusy);
+    }
 
     public Unit GetSelectedUnit()
     {
         return selectedUnit;
     }
+
+    public bool GetBusy() => this.isBusy;
 }

@@ -37,7 +37,7 @@ public class SpinAction : BaseAction
         }
     }
 
-    public void StartSpinning(Action onSpinComplete)
+    public override void TakeAction(GridPosition gridPosition, Action onSpinComplete)
     {
         this.onActionComplete = onSpinComplete;
         isActive = true;
@@ -45,4 +45,13 @@ public class SpinAction : BaseAction
     }
 
     public override string GetActionName() => "Spin";
+
+    public override List<GridPosition> GetValidGridPositionList()
+    {
+        List<GridPosition> validGridPositionList = new List<GridPosition>();
+        GridPosition gridPosition = unit.GetGridPosition();
+        validGridPositionList.Add(gridPosition);
+
+        return validGridPositionList;
+    }
 }
