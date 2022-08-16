@@ -7,6 +7,8 @@ using UnityEngine;
 public class SpinAction : BaseAction
 {
 
+    [SerializeField] int actionPointCost = 2;
+
     private float totalSpinAmount;
 
 
@@ -53,5 +55,10 @@ public class SpinAction : BaseAction
         validGridPositionList.Add(gridPosition);
 
         return validGridPositionList;
+    }
+
+    public override int GetActionPointsCost()
+    {
+        return actionPointCost;
     }
 }

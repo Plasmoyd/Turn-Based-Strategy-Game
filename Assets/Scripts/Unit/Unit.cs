@@ -6,6 +6,8 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
 
+    [SerializeField] private int actionPoints = 4;
+
     private GridPosition currentGridPosition;
     private MoveAction moveAction;
     private SpinAction spinAction;
@@ -38,6 +40,21 @@ public class Unit : MonoBehaviour
         
     }
 
+    public bool TrySpendActionPointsToTakeAction(BaseAction baseAction)
+    {
+        if(CanSpendActionPointsToTakeAction(baseAction))
+        {
+            SpendActionPoints(baseAction.GetActionPointsCost());
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CanSpendActionPointsToTakeAction(BaseAction baseAction) => actionPoints >= baseAction.GetActionPointsCost();
+
+    private void SpendActionPoints(int actionPoints) => this.actionPoints -= actionPoints;
+
 
     public MoveAction GetMoveAction() => moveAction;
 
@@ -46,4 +63,6 @@ public class Unit : MonoBehaviour
     public GridPosition GetGridPosition() => currentGridPosition;
 
     public BaseAction[] GetBaseActions() => baseActions;
+
+    public int GetActionPoints() => actionPoints;
 }
