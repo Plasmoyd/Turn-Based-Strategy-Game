@@ -17,6 +17,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitEnemy
       objectReference: {fileID: 0}
+    - target: {fileID: 4419169447812395756, guid: 30261417206965a4fbcc790b00a46c5e,
+        type: 3}
+      propertyPath: isEnemy
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4419169447812395757, guid: 30261417206965a4fbcc790b00a46c5e,
         type: 3}
       propertyPath: m_RootOrder

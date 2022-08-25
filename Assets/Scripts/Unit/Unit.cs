@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private const int ACTION_POINTS_PER_TURN = 4;
+
+    [Header("Action points")]
+    [SerializeField] private int ACTION_POINTS_PER_TURN = 4;
     [SerializeField] private int currentActionPoints = 4;
+
+    [Header("Is Enemy")]
+    [SerializeField] private bool isEnemy;
 
     private GridPosition currentGridPosition;
     private MoveAction moveAction;
@@ -68,6 +73,8 @@ public class Unit : MonoBehaviour
 
     public int GetCurrentActionPoints() => currentActionPoints;
 
+    public bool IsEnemy() => isEnemy;
+
     private void SpendActionPoints(int actionPoints)
     {
         this.currentActionPoints -= actionPoints;
@@ -76,6 +83,11 @@ public class Unit : MonoBehaviour
 
     private void TurnSystem_OnTurnNumberChanged(object sender, int turnNumber)
     {
+        if(!((TurnSystem.Instance.IsPlayerTurn() && !isEnemy) || (!TurnSystem.Instance.IsPlayerTurn() && isEnemy)))
+        {
+            return; // basically this method should execute only if it's the players turn and it's not an enemy unit or if it's an enemy turn and it's an enemy unit. If it's not that, we return
+        }
+
         currentActionPoints = ACTION_POINTS_PER_TURN;
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
