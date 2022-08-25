@@ -23,6 +23,7 @@ public class UnitActionSystemUI : MonoBehaviour
         UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;
         UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
         UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted;
+        Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged;
 
         CreateUnitActionButtons();
         UpdateSelectedVisuals();
@@ -62,6 +63,11 @@ public class UnitActionSystemUI : MonoBehaviour
         UpdateActionPointsUI();
     }
 
+    private void Unit_OnAnyActionPointsChanged(object sender, EventArgs e)
+    {
+        UpdateActionPointsUI();
+    }
+
     private void ClearButtons()
     {
         foreach(Transform buttonTransform in actionButtonContainerTransform)
@@ -84,6 +90,6 @@ public class UnitActionSystemUI : MonoBehaviour
 
     private void UpdateActionPointsUI()
     {
-        actionPointsText.text = "Action points: " + UnitActionSystem.Instance.GetSelectedUnit().GetActionPoints();
+        actionPointsText.text = "Action points: " + UnitActionSystem.Instance.GetSelectedUnit().GetCurrentActionPoints();
     }
 }
