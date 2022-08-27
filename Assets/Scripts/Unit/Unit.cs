@@ -69,6 +69,8 @@ public class Unit : MonoBehaviour
 
     public GridPosition GetGridPosition() => currentGridPosition;
 
+    public Vector3 GetWorldPosition() => transform.position;
+
     public BaseAction[] GetBaseActions() => baseActions;
 
     public int GetCurrentActionPoints() => currentActionPoints;
@@ -90,5 +92,10 @@ public class Unit : MonoBehaviour
 
         currentActionPoints = ACTION_POINTS_PER_TURN;
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void Damage()
+    {
+        Debug.Log(transform + " damaged!");
     }
 }

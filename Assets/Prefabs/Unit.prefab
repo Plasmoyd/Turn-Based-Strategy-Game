@@ -110,6 +110,8 @@ GameObject:
   - component: {fileID: 736390298239884658}
   - component: {fileID: 4174882787518084791}
   - component: {fileID: 4703997785714711276}
+  - component: {fileID: 339437048384575429}
+  - component: {fileID: 8532582905208957911}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -146,6 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 115398cc83e3c824a9732cfa8d5720f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ACTION_POINTS_PER_TURN: 4
+  currentActionPoints: 4
+  isEnemy: 0
 --- !u!65 &736390298239884658
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -188,6 +193,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afedc134774c50f4e9dc237528832b86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionPointCost: 2
+--- !u!114 &339437048384575429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4419169447812395731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87010faa729a960458514504157eca15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxShootDistance: 5
+  aimingTimer: 2
+  shootingTimer: 0.2
+  cooloffTimer: 0.2
+  rotationSpeed: 10
+--- !u!114 &8532582905208957911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4419169447812395731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a0400c2d3fb2044597b6cb0db9df111, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitAnimator: {fileID: 4323533637973802927}
 --- !u!1001 &4419169446539039223
 PrefabInstance:
   m_ObjectHideFlags: 0
