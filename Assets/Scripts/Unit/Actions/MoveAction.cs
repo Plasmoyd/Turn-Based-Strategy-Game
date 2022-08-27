@@ -5,10 +5,13 @@ using System;
 
 public class MoveAction : BaseAction
 {
+
+    public event EventHandler OnMoveStart;
+    public event EventHandler OnMoveStop;
+
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] float rotationSpeed = 4f;
     [SerializeField] float stoppingDistance = .1f;
-    [SerializeField] Animator unitAnimator;
 
     [SerializeField] int maxMoveDistance = 4;
 
@@ -29,12 +32,11 @@ public class MoveAction : BaseAction
             Vector3 moveDirection = (targetPosition - transform.position).normalized; //without normalizing, we would have a direction vector with a magnitude applied
             transform.position += movementSpeed * Time.deltaTime * moveDirection;
 
-            unitAnimator.SetBool("isRunning", true);
             transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime * rotationSpeed);
         }
         else
         {
-            unitAnimator.SetBool("isRunning", false);
+            OnMoveStop?.Invoke(this, EventArgs.Empty);
             ActionComplete();
         }
     }
@@ -69,6 +71,8 @@ public class MoveAction : BaseAction
     {
         ActionStart(onMoveComplete);
         this.targetPosition = GridLevel.Instance.GetWorldPosition(targetPosition);
+
+        OnMoveStart?.Invoke(this, EventArgs.Empty);
     }
 
     public override string GetActionName() => "Move";
