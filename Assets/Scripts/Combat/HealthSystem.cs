@@ -7,6 +7,7 @@ public class HealthSystem : MonoBehaviour
 {
 
     public event EventHandler OnDead;
+    public event EventHandler OnDamaged;
 
     [SerializeField] private int healthPoints = 100;
 
@@ -20,12 +21,19 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damageAmount, 0, healthPoints);
 
+        OnDamaged?.Invoke(this, EventArgs.Empty);
+
         Debug.Log(currentHealthPoints);
 
         if(currentHealthPoints == 0)
         {
             Die();
         }
+    }
+
+    public float GetHealthNormalized()
+    {
+        return (float)currentHealthPoints / healthPoints;
     }
 
     private void Die()
