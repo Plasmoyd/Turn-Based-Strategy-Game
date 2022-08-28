@@ -6,13 +6,20 @@ using UnityEngine;
 public class ShootAction : BaseAction
 {
 
-    public event EventHandler OnShoot;
+    public event EventHandler<OnShootEventArgs> OnShoot;
+
+    public class OnShootEventArgs
+    {
+        public Unit targetUnit;
+        public Unit shootingUnit;
+    }
 
     [SerializeField] private int maxShootDistance = 5;
     [SerializeField] private float aimingTimer = 2f;
     [SerializeField] private float shootingTimer = .2f;
     [SerializeField] private float cooloffTimer = .2f;
     [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private int damageAmount = 40;
 
     private enum State
     {
@@ -64,8 +71,12 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
-        OnShoot?.Invoke(this, EventArgs.Empty);
-        targetUnit.Damage();
+        OnShoot?.Invoke(this, new OnShootEventArgs
+        {
+            targetUnit = targetUnit,
+            shootingUnit = unit
+        });
+        targetUnit.DealDamage(damageAmount);
         canShootBullet = false;
     }
 

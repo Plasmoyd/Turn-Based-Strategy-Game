@@ -6,6 +6,8 @@ using UnityEngine;
 public class UnitAnimator : MonoBehaviour
 {
     [SerializeField] private Animator unitAnimator;
+    [SerializeField] private Transform bulletProjectilePrefab;
+    [SerializeField] private Transform shootPointTransform;
 
     private void Awake()
     {
@@ -31,8 +33,16 @@ public class UnitAnimator : MonoBehaviour
         unitAnimator.SetBool("isRunning", false);
     }
 
-    private void ShootAction_OnShoot(object sender, EventArgs e)
+    private void ShootAction_OnShoot(object sender, ShootAction.OnShootEventArgs e)
     {
         unitAnimator.SetTrigger("Shoot");
+
+        Transform bulletProjectileTransform = Instantiate(bulletProjectilePrefab, shootPointTransform.position, Quaternion.identity);
+        BulletProjectile bulletProjectile = bulletProjectileTransform.GetComponent<BulletProjectile>();
+
+        Vector3 targetPosition = e.targetUnit.GetWorldPosition();
+        targetPosition.y = shootPointTransform.position.y; // this fixes the issue where unit was shooting at another units feet. this makes sure that a bullet will fly horizontally.
+
+        bulletProjectile.Setup(targetPosition);
     }
 }

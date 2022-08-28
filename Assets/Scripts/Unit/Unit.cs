@@ -6,6 +6,8 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
 
+    public static event EventHandler OnAnyActionPointsChanged;
+
     [Header("Action points")]
     [SerializeField] private int ACTION_POINTS_PER_TURN = 4;
     [SerializeField] private int currentActionPoints = 4;
@@ -17,14 +19,16 @@ public class Unit : MonoBehaviour
     private MoveAction moveAction;
     private SpinAction spinAction;
     private BaseAction[] baseActions;
+    private HealthSystem healthSystem;
 
-    public static event EventHandler OnAnyActionPointsChanged;
+    
 
     private void Awake()
     {
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
         baseActions = GetComponents<BaseAction>();
+        healthSystem = GetComponent<HealthSystem>();
     }
 
     private void Start()
@@ -33,6 +37,8 @@ public class Unit : MonoBehaviour
 
         currentGridPosition = GridLevel.Instance.GetGridPosition(transform.position);
         GridLevel.Instance.SetUnitAtGridPosition(currentGridPosition, this);
+
+        healthSystem.OnDead += HealthSystem_OnDead;
     }
 
     void Update()
@@ -83,6 +89,11 @@ public class Unit : MonoBehaviour
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    public void DealDamage(int damageAmount)
+    {
+        healthSystem.DealDamage(damageAmount);
+    }
+
     private void TurnSystem_OnTurnNumberChanged(object sender, int turnNumber)
     {
         if(!((TurnSystem.Instance.IsPlayerTurn() && !isEnemy) || (!TurnSystem.Instance.IsPlayerTurn() && isEnemy)))
@@ -94,8 +105,10 @@ public class Unit : MonoBehaviour
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public void Damage()
+    private void HealthSystem_OnDead(object sender, EventArgs e)
     {
-        Debug.Log(transform + " damaged!");
+        GridLevel.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
+        Destroy(gameObject);
     }
+
 }

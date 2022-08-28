@@ -97,6 +97,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 4419169447812395756}
+--- !u!1 &1729078359251842172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4241205931792179588}
+  m_Layer: 7
+  m_Name: ShootPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4241205931792179588
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729078359251842172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0022, y: 0.0843, z: 0.7246}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4414761248260347721}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4419169447812395731
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,6 +143,8 @@ GameObject:
   - component: {fileID: 4703997785714711276}
   - component: {fileID: 339437048384575429}
   - component: {fileID: 8532582905208957911}
+  - component: {fileID: 5080142046433255056}
+  - component: {fileID: 1671125750403310139}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -179,7 +212,6 @@ MonoBehaviour:
   movementSpeed: 5
   rotationSpeed: 20
   stoppingDistance: 0.1
-  unitAnimator: {fileID: 4323533637973802927}
   maxMoveDistance: 3
 --- !u!114 &4703997785714711276
 MonoBehaviour:
@@ -207,10 +239,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxShootDistance: 5
-  aimingTimer: 2
+  aimingTimer: 1
   shootingTimer: 0.2
   cooloffTimer: 0.2
   rotationSpeed: 10
+  damageAmount: 40
 --- !u!114 &8532582905208957911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,6 +257,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitAnimator: {fileID: 4323533637973802927}
+  bulletProjectilePrefab: {fileID: 4007249056203303251, guid: 65230cb5052fc3c4dbcbd5ca2a8f77bd,
+    type: 3}
+  shootPointTransform: {fileID: 4241205931792179588}
+--- !u!114 &5080142046433255056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4419169447812395731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cba691afeee19a44993bb5e5aa650d82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthPoints: 100
+--- !u!114 &1671125750403310139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4419169447812395731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be9e6c9a9159a2947b5b5acf5daf1822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ragdollPrefab: {fileID: 4419169447812395757, guid: 6313a3d301e35054ca69d972a48949c4,
+    type: 3}
+  originalRootBone: {fileID: 4415128449761266349}
 --- !u!1001 &4419169446539039223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -527,6 +591,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 4419169446539039223}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &4415128449761266349 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4966341056781146, guid: 2f3e27eecb190e44a9af50723c394274,
+    type: 3}
+  m_PrefabInstance: {fileID: 4419169446539039223}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4421086138976074237 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4170833147357194, guid: 2f3e27eecb190e44a9af50723c394274,
@@ -638,3 +708,9 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 25af05085d2957e42ac6b80b69ddd26a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c25ac4fdc903e7d49a7520930673ecd6, type: 3}
+--- !u!4 &4414761248260347721 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4620998167008108, guid: c25ac4fdc903e7d49a7520930673ecd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4419169447910523941}
+  m_PrefabAsset: {fileID: 0}
