@@ -69,10 +69,12 @@ public class MoveAction : BaseAction
 
     public override void TakeAction(GridPosition targetPosition, Action onMoveComplete)
     {
-        ActionStart(onMoveComplete);
+        
         this.targetPosition = GridLevel.Instance.GetWorldPosition(targetPosition);
 
         OnMoveStart?.Invoke(this, EventArgs.Empty);
+
+        ActionStart(onMoveComplete);
     }
 
     public override string GetActionName() => "Move";

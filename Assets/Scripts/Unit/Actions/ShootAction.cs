@@ -142,11 +142,15 @@ public class ShootAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onShootComplete)
     {
-        ActionStart(onShootComplete);
+        
         this.targetUnit = GridLevel.Instance.GetUnitAtGridPosition(gridPosition);
         canShootBullet = true;
         state = State.Aiming;
         stateTimer = aimingTimer;
 
+        ActionStart(onShootComplete);
+
     }
+
+    public Unit GetTargetUnit() => targetUnit;
 }

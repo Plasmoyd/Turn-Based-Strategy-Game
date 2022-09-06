@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,9 @@ public class GridSystemVisual : MonoBehaviour
                 visualSingleArray[x, z] = visualSingle;
             }
         }
+
+        UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged;
+        GridLevel.Instance.OnAnyUnitMoved += GridLevel_OnAnyUnitMoved;
     }
 
     private void UpdateGridVisuals()
@@ -62,6 +66,14 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    
+    private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e)
+    {
+        UpdateGridVisuals();
+    }
+
+    private void GridLevel_OnAnyUnitMoved(object sender, EventArgs e)
+    {
+        UpdateGridVisuals();
+    }
 
 }

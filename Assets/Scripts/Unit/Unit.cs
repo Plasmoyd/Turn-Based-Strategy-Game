@@ -48,9 +48,10 @@ public class Unit : MonoBehaviour
 
         if(currentGridPosition != newGridPosition)
         {
-            GridLevel.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
-            GridLevel.Instance.SetUnitAtGridPosition(newGridPosition, this);
+            GridPosition oldGridPosition = currentGridPosition;
             currentGridPosition = newGridPosition;
+
+            GridLevel.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition); //it's important that this line is after assigning new grid position
         }
         
     }
