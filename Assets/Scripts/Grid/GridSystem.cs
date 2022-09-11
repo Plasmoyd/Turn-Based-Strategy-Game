@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSystem
+public class GridSystem<TGridObject>
 {
 
     private const int STARTING_WIDTH = 0;
@@ -13,22 +13,22 @@ public class GridSystem
     private int height;
     private float cellSize;
 
-    private GridObject[,] gridObjects;
+    private TGridObject[,] gridObjects;
 
-    public GridSystem(int width, int height, float cellSize)
+    public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
 
-        this.gridObjects = new GridObject[width, height];
+        this.gridObjects = new TGridObject[width, height];
 
         for(int x = STARTING_WIDTH; x < width; x++)
         {
             for(int z = STARTING_HEIGHT; z < height; z++)
             {
                 GridPosition gridPosition = new GridPosition(x, z);
-                gridObjects[x, z] = new GridObject(this, gridPosition);
+                gridObjects[x, z] = createGridObject(this, gridPosition);
             }
         }
     }
@@ -57,16 +57,20 @@ public class GridSystem
 
                 Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
                 GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
-                gridDebugObject.SetGridObject(GetGridObject(gridPosition));
+                gridDebugObject.SetGridObject(GetGridObject(gridPosition) as GridObject);
             }
         }
     }
 
-    public GridObject GetGridObject(GridPosition gridPosition) => gridObjects[gridPosition.x, gridPosition.z];
+    public TGridObject GetGridObject(GridPosition gridPosition) => gridObjects[gridPosition.x, gridPosition.z];
 
     public bool IsValidGridPosition(GridPosition gridPosition) => (gridPosition.x >= STARTING_WIDTH && gridPosition.x < width) && (gridPosition.z >= STARTING_HEIGHT && gridPosition.z < height);
 
-    public bool IsOccupiedGridPosition(GridPosition gridPosition) => GetGridObject(gridPosition).IsPopulated(); //checks if there are any units stored in grid object on this grid position
+    public bool IsOccupiedGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = GetGridObject(gridPosition) as GridObject;
+        return gridObject.IsPopulated();
+    }//checks if there are any units stored in grid object on this grid position
 
     public int GetGridWidth() => this.width;
 

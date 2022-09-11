@@ -10,7 +10,7 @@ public class GridLevel : MonoBehaviour
 
     [SerializeField] Transform debugPrefab;
 
-    private GridSystem gridSystem;
+    private GridSystem<GridObject> gridSystem;
 
     public static GridLevel Instance; //Singleton
 
@@ -25,7 +25,7 @@ public class GridLevel : MonoBehaviour
 
         Instance = this;
 
-        gridSystem = new GridSystem(10, 10, 2);
+        gridSystem = new GridSystem<GridObject>(10, 10, 2, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         gridSystem.CreateDebugObjects(debugPrefab);
     }
 

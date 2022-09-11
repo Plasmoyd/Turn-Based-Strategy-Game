@@ -7,6 +7,8 @@ public class Unit : MonoBehaviour
 {
 
     public static event EventHandler OnAnyActionPointsChanged;
+    public static event EventHandler OnAnyUnitSpawned;
+    public static event EventHandler OnAnyUnitDead;
 
     [Header("Action points")]
     [SerializeField] private int ACTION_POINTS_PER_TURN = 4;
@@ -16,8 +18,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private bool isEnemy;
 
     private GridPosition currentGridPosition;
-    private MoveAction moveAction;
-    private SpinAction spinAction;
     private BaseAction[] baseActions;
     private HealthSystem healthSystem;
 
@@ -25,8 +25,6 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        moveAction = GetComponent<MoveAction>();
-        spinAction = GetComponent<SpinAction>();
         baseActions = GetComponents<BaseAction>();
         healthSystem = GetComponent<HealthSystem>();
     }
@@ -39,6 +37,8 @@ public class Unit : MonoBehaviour
         GridLevel.Instance.SetUnitAtGridPosition(currentGridPosition, this);
 
         healthSystem.OnDead += HealthSystem_OnDead;
+
+        OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     void Update()
@@ -67,12 +67,20 @@ public class Unit : MonoBehaviour
         return false;
     }
 
-    private bool CanSpendActionPointsToTakeAction(BaseAction baseAction) => currentActionPoints >= baseAction.GetActionPointsCost();
+    public T GetAction<T>() where T:BaseAction
+    {
+        foreach(BaseAction baseAction in baseActions)
+        {
+            if(baseAction is T)
+            {
+                return (T) baseAction;
+            }
+        }
 
-    
-    public MoveAction GetMoveAction() => moveAction;
+        return null;
+    }
 
-    public SpinAction GetSpinAction() => spinAction;
+    public bool CanSpendActionPointsToTakeAction(BaseAction baseAction) => currentActionPoints >= baseAction.GetActionPointsCost();
 
     public GridPosition GetGridPosition() => currentGridPosition;
 
@@ -110,6 +118,12 @@ public class Unit : MonoBehaviour
     {
         GridLevel.Instance.ClearUnitAtGridPosition(currentGridPosition, this);
         Destroy(gameObject);
+        OnAnyUnitDead?.Invoke(this, EventArgs.Empty);
+    }
+
+    public float GetHealthNormalized()
+    {
+        return healthSystem.GetHealthNormalized();
     }
 
 }
