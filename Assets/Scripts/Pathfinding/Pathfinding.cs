@@ -8,6 +8,7 @@ public class Pathfinding : MonoBehaviour
     public static Pathfinding Instance { get; private set; }
 
     [SerializeField] Transform pathfindingDebugObjectTransform;
+    [SerializeField] LayerMask obstaclesLayerMask;
 
     private const int DIAGONAL_MOVE_COST = 14;
     private const int STRAIGHT_MOVE_COST = 10;
@@ -38,6 +39,22 @@ public class Pathfinding : MonoBehaviour
 
         gridSystem = new GridSystem<PathNode>(width, height, cellSize, (GridSystem<PathNode> gridSystem, GridPosition gridPosition) => new PathNode(gridPosition));
         gridSystem.CreateDebugObjects(pathfindingDebugObjectTransform);
+
+        for(int x = gridSystem.GetStartingWidth(); x < gridSystem.GetGridWidth(); x++)
+        {
+            for(int z = gridSystem.GetStartingHeight(); z < gridSystem.GetGridHeight(); z++)
+            {
+                GridPosition gridPosition = new GridPosition(x, z);
+                Vector3 worldPosition = GridLevel.Instance.GetWorldPosition(gridPosition);
+                float raycastOffsetDistance = 5f;
+                bool obstacleHit = Physics.Raycast(worldPosition + Vector3.down * raycastOffsetDistance, Vector3.up, raycastOffsetDistance * 2, obstaclesLayerMask);
+
+                if(obstacleHit)
+                {
+                    GetNode(x, z).SetIsWalkable(false);
+                }
+            }
+        }
     }
 
     public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
@@ -91,6 +108,12 @@ public class Pathfinding : MonoBehaviour
                 if(closedList.Contains(neighbourNode))
                 {
                     //if the algorithm has already checked this node out, then we should not check it again.
+                    continue;
+                }
+
+                if(!neighbourNode.IsWalkable())
+                {
+                    closedList.Add(neighbourNode);
                     continue;
                 }
 
