@@ -57,7 +57,7 @@ public class GridSystem<TGridObject>
 
                 Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
                 GridDebugObject gridDebugObject = debugTransform.GetComponent<GridDebugObject>();
-                gridDebugObject.SetGridObject(GetGridObject(gridPosition) as GridObject);
+                gridDebugObject.SetGridObject(GetGridObject(gridPosition));
             }
         }
     }

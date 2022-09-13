@@ -26,7 +26,7 @@ public class GridLevel : MonoBehaviour
         Instance = this;
 
         gridSystem = new GridSystem<GridObject>(10, 10, 2, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
-        gridSystem.CreateDebugObjects(debugPrefab);
+        //gridSystem.CreateDebugObjects(debugPrefab);
     }
 
     public void SetUnitAtGridPosition(GridPosition gridPosition, Unit unit) => gridSystem.GetGridObject(gridPosition).AddUnit(unit);
