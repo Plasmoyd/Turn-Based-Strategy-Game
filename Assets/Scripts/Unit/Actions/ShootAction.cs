@@ -20,6 +20,7 @@ public class ShootAction : BaseAction
     [SerializeField] private float cooloffTimer = .2f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private int damageAmount = 40;
+    [SerializeField] private LayerMask obstacleLayerMask;
 
     private enum State
     {
@@ -139,6 +140,14 @@ public class ShootAction : BaseAction
 
                 //No need for null  check here because i'm checking wheter there's a unit on this position in previous check
                 if (targetUnit.IsEnemy() == unit.IsEnemy()) continue; //if target and unit are on the same team, we don't want friendly fire.
+
+                float unitShoulderHeight = 1.7f;
+                Vector3 startPosition = unit.GetWorldPosition() + Vector3.up * unitShoulderHeight;
+                Vector3 direction = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+
+                bool obstacleHit = Physics.Raycast(startPosition, direction, Vector3.Distance(unit.GetWorldPosition(), targetUnit.GetWorldPosition()), obstacleLayerMask);
+
+                if (obstacleHit) continue; //we don't want to shoot through obstacles
 
                 validGridPositionList.Add(testGridPosition);
             }

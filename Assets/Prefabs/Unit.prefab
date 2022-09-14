@@ -513,6 +513,9 @@ MonoBehaviour:
   cooloffTimer: 0.2
   rotationSpeed: 10
   damageAmount: 40
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &8532582905208957911
 MonoBehaviour:
   m_ObjectHideFlags: 0

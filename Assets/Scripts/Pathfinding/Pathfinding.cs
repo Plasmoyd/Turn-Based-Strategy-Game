@@ -38,7 +38,7 @@ public class Pathfinding : MonoBehaviour
         this.cellSize = cellSize;
 
         gridSystem = new GridSystem<PathNode>(width, height, cellSize, (GridSystem<PathNode> gridSystem, GridPosition gridPosition) => new PathNode(gridPosition));
-        gridSystem.CreateDebugObjects(pathfindingDebugObjectTransform);
+        //gridSystem.CreateDebugObjects(pathfindingDebugObjectTransform);
 
         for(int x = gridSystem.GetStartingWidth(); x < gridSystem.GetGridWidth(); x++)
         {
@@ -57,7 +57,7 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
-    public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
+    public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition, out int pathLength)
     {
 
         List<PathNode> openList = new List<PathNode>();
@@ -91,8 +91,11 @@ public class Pathfinding : MonoBehaviour
             if (currentNode == endPathNode)
             {
                 //if we are in this check, we have reached our final node, and it's time to calculate a path
+                pathLength = endPathNode.GetFCost();
                 return CalculatePath(endPathNode);
             }
+
+            
 
             //if this is not the final node, we want to remove the current node from the open list, and add it to the closed one
             // we also want to search for all neighbouring nodes
@@ -137,6 +140,7 @@ public class Pathfinding : MonoBehaviour
         }
 
         //this happens only if we can't find a path to the end node
+        pathLength = 0;
         return null;
     }
 
@@ -220,5 +224,22 @@ public class Pathfinding : MonoBehaviour
     private PathNode GetNode(int x, int z)
     {
         return gridSystem.GetGridObject(new GridPosition(x, z));
+    }
+
+    public bool IsWalkableGridPosition(GridPosition gridPosition)
+    {
+        PathNode pathNode = GetNode(gridPosition.x, gridPosition.z);
+        return pathNode.IsWalkable();
+    }
+
+    public bool HasPath(GridPosition startGridPosition, GridPosition endGridPosition)
+    {
+        return FindPath(startGridPosition, endGridPosition, out int pathLength) != null;
+    }
+
+    public int GetPathLength(GridPosition startGridPosition, GridPosition endGridPosition)
+    {
+        FindPath(startGridPosition, endGridPosition, out int pathLength);
+        return pathLength;
     }
 }
