@@ -6,6 +6,7 @@ using UnityEngine;
 public class ShootAction : BaseAction
 {
 
+    public static event EventHandler OnAnyShoot;
     public event EventHandler<OnShootEventArgs> OnShoot;
 
     public class OnShootEventArgs
@@ -72,6 +73,9 @@ public class ShootAction : BaseAction
 
     private void Shoot()
     {
+
+        OnAnyShoot?.Invoke(this, EventArgs.Empty);
+
         OnShoot?.Invoke(this, new OnShootEventArgs
         {
             targetUnit = targetUnit,
@@ -143,7 +147,7 @@ public class ShootAction : BaseAction
 
                 float unitShoulderHeight = 1.7f;
                 Vector3 startPosition = unit.GetWorldPosition() + Vector3.up * unitShoulderHeight;
-                Vector3 direction = (targetUnit.GetWorldPosition() - unit.GetWorldPosition()).normalized;
+                Vector3 direction = (targetUnit.GetWorldPosition() - GridLevel.Instance.GetWorldPosition(gridPosition)).normalized;
 
                 bool obstacleHit = Physics.Raycast(startPosition, direction, Vector3.Distance(unit.GetWorldPosition(), targetUnit.GetWorldPosition()), obstacleLayerMask);
 
