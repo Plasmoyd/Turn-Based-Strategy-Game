@@ -39,11 +39,16 @@ public class GrenadeProjectile : MonoBehaviour
         {
             Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
 
-            foreach(Collider collider in colliders)
+            foreach (Collider collider in colliders)
             {
-                if(collider.TryGetComponent<Unit>(out Unit targetUnit))
+                if (collider.TryGetComponent<Unit>(out Unit targetUnit))
                 {
                     targetUnit.DealDamage(damageAmount);
+                }
+
+                if (collider.TryGetComponent<DestructibleCrate>(out DestructibleCrate destructibleCrate))
+                {
+                    destructibleCrate.Damage();
                 }
             }
 
