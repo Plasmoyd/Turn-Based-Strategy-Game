@@ -80,8 +80,9 @@ public class GridSystemVisual : MonoBehaviour
 
         BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
         GridVisualType gridVisualType;
+        GridPosition gridPosition;
 
-        switch(selectedAction)
+        switch (selectedAction)
         {
             default:
 
@@ -95,9 +96,24 @@ public class GridSystemVisual : MonoBehaviour
 
                 gridVisualType = GridVisualType.Red;
 
-                GridPosition gridPosition = UnitActionSystem.Instance.GetSelectedUnit().GetGridPosition();
+                gridPosition = UnitActionSystem.Instance.GetSelectedUnit().GetGridPosition();
                 int range = shootAction.GetMaxShootDistance();
                 ShowGridPositionRange(gridPosition, range, GridVisualType.RedSoft);
+
+                break;
+
+            case GrenadeAction grenadeAction:
+
+                gridVisualType = GridVisualType.Yellow;
+
+                break;
+
+            case SwordAction swordAction:
+
+                gridPosition = UnitActionSystem.Instance.GetSelectedUnit().GetGridPosition();
+                gridVisualType = GridVisualType.Red;
+                int swordRange = swordAction.GetMaxSwordDistance();
+                ShowGridPositionRangeSquare(gridPosition, swordRange, gridVisualType);
 
                 break;
         }
@@ -133,6 +149,27 @@ public class GridSystemVisual : MonoBehaviour
 
                 gridPositionList.Add(testGridPosition);
                 
+            }
+        }
+
+        ShowGridPositionList(gridPositionList, GridVisualType.RedSoft);
+    }
+
+    private void ShowGridPositionRangeSquare(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+    {
+        List<GridPosition> gridPositionList = new List<GridPosition>();
+
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= +range; z++)
+            {
+                GridPosition offsetGridPosition = new GridPosition(x, z);
+                GridPosition testGridPosition = gridPosition + offsetGridPosition;
+
+                if (!GridLevel.Instance.IsValidGridPosition(testGridPosition)) continue;
+
+                gridPositionList.Add(testGridPosition);
+
             }
         }
 

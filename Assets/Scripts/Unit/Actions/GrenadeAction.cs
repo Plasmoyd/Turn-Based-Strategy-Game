@@ -7,6 +7,9 @@ public class GrenadeAction : BaseAction
 {
     [SerializeField] private int maxThrowDistance = 7;
     [SerializeField] private Transform grenadeProjectilePrefab;
+    [SerializeField] private float rotationSpeed = 10f;
+
+    private GridPosition targetGridPosition;
 
     private void Update()
     {
@@ -14,6 +17,8 @@ public class GrenadeAction : BaseAction
         {
             return;
         }
+
+        transform.forward = Vector3.Lerp(transform.forward, GridLevel.Instance.GetWorldPosition(targetGridPosition), rotationSpeed * Time.deltaTime); // this needs to be fixed by adding states for aiming and throwing like in shootAction!
     }
 
     public override string GetActionName()
@@ -68,6 +73,8 @@ public class GrenadeAction : BaseAction
 
     public override void TakeAction(GridPosition gridPosition, Action onActionComplete)
     {
+        targetGridPosition = gridPosition;
+
         Transform grenadeProjectileTransform = Instantiate(grenadeProjectilePrefab, unit.GetWorldPosition(), Quaternion.identity);
         GrenadeProjectile grenadeProjectile = grenadeProjectileTransform.GetComponent<GrenadeProjectile>();
         grenadeProjectile.Setup(gridPosition, OnGrenadeBehaviourComplete);

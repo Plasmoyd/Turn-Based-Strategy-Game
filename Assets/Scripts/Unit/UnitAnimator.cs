@@ -8,6 +8,8 @@ public class UnitAnimator : MonoBehaviour
     [SerializeField] private Animator unitAnimator;
     [SerializeField] private Transform bulletProjectilePrefab;
     [SerializeField] private Transform shootPointTransform;
+    [SerializeField] private Transform rifleTransform;
+    [SerializeField] private Transform swordTransform;
 
     private void Awake()
     {
@@ -21,6 +23,14 @@ public class UnitAnimator : MonoBehaviour
         {
             shootAction.OnShoot += ShootAction_OnShoot;
         }
+
+        if(TryGetComponent<SwordAction>(out SwordAction swordAction))
+        {
+            swordAction.OnSwordActionStart += SwordAction_OnSwordActionStart;
+            swordAction.OnSwordActionComplete += SwordAction_OnSwordActionComplete;
+        }
+
+        EquipRifle();
     }
 
     private void MoveAction_OnMoveStart(object sender, EventArgs e)
@@ -44,5 +54,28 @@ public class UnitAnimator : MonoBehaviour
         targetPosition.y = shootPointTransform.position.y; // this fixes the issue where unit was shooting at another units feet. this makes sure that a bullet will fly horizontally.
 
         bulletProjectile.Setup(targetPosition);
+    }
+
+    private void SwordAction_OnSwordActionStart(object sender, EventArgs e)
+    {
+        EquipSword();
+        unitAnimator.SetTrigger("SwordSlash");
+    }
+
+    private void SwordAction_OnSwordActionComplete(object sender, EventArgs e)
+    {
+        EquipRifle();
+    }
+
+    private void EquipRifle()
+    {
+        rifleTransform.gameObject.SetActive(true);
+        swordTransform.gameObject.SetActive(false);
+    }
+
+    private void EquipSword()
+    {
+        rifleTransform.gameObject.SetActive(false);
+        swordTransform.gameObject.SetActive(true);
     }
 }
