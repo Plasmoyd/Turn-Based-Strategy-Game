@@ -69,4 +69,8 @@ public class GridLevel : MonoBehaviour
 
     public int GetStartingGridHeight() => gridSystem.GetStartingHeight();
 
+    public IInteractable GetDoorAtGridPosition(GridPosition gridPosition) => gridSystem.GetGridObject(gridPosition).GetInteractable();
+
+    public void SetDoorAtGridPosition(GridPosition gridPosition, Door door) => gridSystem.GetGridObject(gridPosition).SetInteractable(door);
+
 }

@@ -7,6 +7,7 @@ public class GridObject
     private GridSystem<GridObject> gridSystem;
     private GridPosition gridPosition;
     private List<Unit> unitList;
+    private IInteractable interactable;
 
     public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
     {
@@ -40,4 +41,8 @@ public class GridObject
     {
         return IsPopulated() ? unitList[0] : null; 
     }
+
+    public void SetInteractable(IInteractable interactable) => this.interactable = interactable;
+
+    public IInteractable GetInteractable() => interactable;
 }
