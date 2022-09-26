@@ -67,9 +67,9 @@ public class UnitActionSystem : MonoBehaviour
     private bool TryHandleUnitSelection()
     {
 
-        if(InputManager.Instance.IsMouseButtonDown())
+        if(Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(MouseWorld.GetMousePosition());
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, unitLayerMask))
             {
@@ -104,7 +104,7 @@ public class UnitActionSystem : MonoBehaviour
 
     private void HandleSelectedAction()
     {
-        if(InputManager.Instance.IsMouseButtonDown())
+        if(Input.GetMouseButtonDown(0))
         {
             GridPosition mouseGridPosition = GridLevel.Instance.GetGridPosition(MouseWorld.GetMousePosition()); // turning mice world position to corresponding grid position
 
