@@ -69,4 +69,7 @@ public class GridLevel : MonoBehaviour
 
     public int GetStartingGridHeight() => gridSystem.GetStartingHeight();
 
+    public IInteractable GetInteractableAtGridPosition(GridPosition gridPosition) => gridSystem.GetGridObject(gridPosition).GetInteractable();
+
+    public void SetInteravtableAtGridPosition(GridPosition gridPosition, IInteractable interactable) => gridSystem.GetGridObject(gridPosition).SetInteractable(interactable);
 }
