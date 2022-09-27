@@ -18,7 +18,7 @@ public class GrenadeAction : BaseAction
             return;
         }
 
-        transform.forward = Vector3.Lerp(transform.forward, GridLevel.Instance.GetWorldPosition(targetGridPosition), rotationSpeed * Time.deltaTime); // this needs to be fixed by adding states for aiming and throwing like in shootAction!
+        //transform.forward = Vector3.Lerp(transform.forward, GridLevel.Instance.GetWorldPosition(targetGridPosition), rotationSpeed * Time.deltaTime); // this needs to be fixed by adding states for aiming and throwing like in shootAction!
     }
 
     public override string GetActionName()
